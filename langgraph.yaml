@@ -1,0 +1,27 @@
+name: time_bot
+version: 1.0
+
+# Определение инструментов
+tools:
+  - name: get_current_time
+    description: "Возвращает текущее время в UTC в формате ISO-8601"
+    implementation: |
+      def get_current_time() -> dict:
+          import datetime
+          now = datetime.datetime.utcnow()
+          iso_time = now.isoformat() + "Z"
+          return {"utc": iso_time}
+
+# Обработчик сообщений
+handlers:
+    script: |
+      def handle_message(message):
+          if "время" in message.lower() or "time" in message.lower():
+              return get_current_time()
+          else:
+              return 'Я могу сказать тебе текущее время. Запрос должен содержать слова "время" или "time"'
+      
+      # Вызов функции
+      message = input("Пользователь: ")
+      response = handle_message(message)
+      print("Бот:", response)
